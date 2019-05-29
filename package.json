@@ -12,7 +12,8 @@
     "media player"
   ],
   "scripts": {
-    "build": "webpack --mode=production --config webpack.config.js"
+    "build": "webpack --mode=production --config webpack.config.js",
+    "test": "./node_modules/.bin/jest --config .jestrc.js"
   },
   "dependencies": {
     "@akwaba/eslint-config": "^1.1.0",

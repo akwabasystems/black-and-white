@@ -6,7 +6,7 @@ module.exports = {
         "global.js"
     ],
     testMatch: [
-        "**/tests/**/*.spec.js"
+        "**/test/**/*.spec.js"
     ],
     transformIgnorePatterns: [
         "node_modules/(?!@akwaba)"
