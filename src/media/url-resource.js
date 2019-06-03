@@ -1,4 +1,3 @@
-import { isString } from "@akwaba/object-extensions/src/is-string";
 import * as MediaType from "../constants/media-type";
 import { INVALID_URL } from "../constants/media-error-event-type";
 
@@ -6,38 +5,39 @@ import { INVALID_URL } from "../constants/media-error-event-type";
 export default class URLResource {
 
     constructor(url, mediaType = MediaType.VIDEO) {
-        this._url = url;
-        this._mediaType = mediaType;
+        this.url = url;
+        this.mediaType = mediaType;
     }
 
-    set url(value) {
-        this._url = value;
+    setURL(url) {
+        this.url = url;
     }
 
-    get url() {
-        return this._url;
+    getURL() {
+        return this.url;
     }
 
-    set mediaType(type) {
+    setMediaType(type) {
         const isValidType = Object.keys(MediaType).includes(type.toUpperCase());
 
         if (!isValidType) {
             throw new Error(INVALID_URL);
         }
 
-        this._mediaType = type;
+        this.mediaType = type;
     }
 
-    get mediaType() {
-        return this._mediaType;
+    getMediaType() {
+        return this.mediaType;
     }
 
-    get extension() {
-        return this._url.substring(this._url.lastIndexOf(".") + 1);
+    getExtension() {
+        return this.url.substring(this.url.lastIndexOf(".") + 1);
     }
+
 
     toString() {
-        return `URL Resource { URL: "${this._url}", MediaType: "${this._mediaType}" }`;
+        return `URL Resource { URL: "${this.url}", MediaType: "${this.mediaType}" }`;
     }
 
-};
+}
