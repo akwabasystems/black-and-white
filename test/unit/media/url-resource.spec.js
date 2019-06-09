@@ -11,20 +11,20 @@ describe("URLResource", () => {
         const resource = new URLResource(url);
 
         expect(resource).toBeDefined();
-        expect(resource.url).toBe(url);
+        expect(resource.getURL()).toBe(url);
     });
 
     it("should set the media type to 'video' by default", () => {
         const resource = new URLResource(url);
-        expect(resource.mediaType).toBe(MediaType.VIDEO);
+        expect(resource.getMediaType()).toBe(MediaType.VIDEO);
     });
 
     it("should set the media type to a different type", () => {
         const resource = new URLResource(url);
-        expect(resource.mediaType).toBe(MediaType.VIDEO);
+        expect(resource.getMediaType()).toBe(MediaType.VIDEO);
 
-        resource.mediaType = MediaType.AUDIO;
-        expect(resource.mediaType).toBe(MediaType.AUDIO);
+        resource.setMediaType(MediaType.AUDIO);
+        expect(resource.getMediaType()).toBe(MediaType.AUDIO);
     });
 
     it("should throw an exception when the media type is set to an invalid type", () => {
@@ -32,7 +32,7 @@ describe("URLResource", () => {
 
         try {
 
-            resource.mediaType = "Unknown-Type";
+            resource.setMediaType("Unknown-Type");
         
         } catch(e) {
             expect(e.message).toBe("INVALID_URL");
@@ -41,11 +41,11 @@ describe("URLResource", () => {
 
     it("should return the extension based on the URL string", () => {
         const resource = new URLResource(url);
-        expect(resource.extension).toBe("mp4");
+        expect(resource.getExtension()).toBe("mp4");
 
-        resource.url = "/audio/intro.mp3";
-        resource.mediaType = MediaType.AUDIO;
-        expect(resource.extension).toBe("mp3");
+        resource.setURL("/audio/intro.mp3");
+        resource.setMediaType(MediaType.AUDIO);
+        expect(resource.getExtension()).toBe("mp3");
         expect(resource.toString()).toBe('URL Resource { URL: "/audio/intro.mp3", MediaType: "audio" }');
     });
 
