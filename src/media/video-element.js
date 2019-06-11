@@ -7,8 +7,8 @@
  *--------------------------------------------------------------------------------------------------------------------*/
 
 import Extensions       from "@akwaba/object-extensions";
-import MediaElement     from "./media-element";
 import { VIDEO }        from "../constants/media-type";
+import MediaElement     from "./media-element";
 
 
 export default class AbstractVideoElement extends MediaElement {

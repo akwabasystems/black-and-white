@@ -1,11 +1,11 @@
 import HTML                         from "@akwaba/html";
 
-import * as EventDispatcher         from "../events/event-dispatcher";
-import URLResource                  from "./url-resource";
-
 import { VIDEO }                    from "../constants/media-type";
 import { INVALID_CUSTOM_EVENT }     from "../events/event-dispatcher";
 import { INVALID_MEDIA_CONTAINER }  from "../constants/media-error-event-type";
+
+import * as EventDispatcher         from "../events/event-dispatcher";
+import URLResource                  from "./url-resource";
 
 
 export default class MediaElement {
