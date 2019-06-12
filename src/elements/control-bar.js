@@ -228,16 +228,8 @@ export default class ControlBar {
             this.fillElapsedDurationAtCurrentPlayhead();
             this.delegate.beginSeeking(this, this.playheadOffsetPercentage);
         } else {
-            HTML.setStyle(this.volumeHandle, {
-                left: `${positionX}px`
-            });
-
-            HTML.setStyle(this.volumeFiller, {
-                width: `${positionX}px`
-            });
-
+            this.positionVolumeHandleAt(positionX);
             const volumeLevel = Math.max(0, DOM.positionedOffset(this.volumeHandle).left / this.seekableInterval);
-            this.afterVolumeLevelSet(volumeLevel);
             this.delegate.onVolumeChanged(volumeLevel);
         }
     };
@@ -292,17 +284,29 @@ export default class ControlBar {
     setVolumeLevel(volumeLevel) {
         const handleWidth = DOM.width(this.volumeHandle);
         const pixelOffset = Math.floor(DOM.width(this.volumeTrack) - handleWidth) * volumeLevel;
+        this.positionVolumeHandleAt(pixelOffset);
 
+        return this;
+    }
+
+
+    /**
+     * Positions the volume handle at the specified position
+     *
+     * @param {Number} position     the position to move the volume handle to
+     */
+    positionVolumeHandleAt(position) {
         HTML.setStyle(this.volumeHandle, {
-            left: `${pixelOffset}px`
+            left: `${position}px`
         });
 
         HTML.setStyle(this.volumeFiller, {
-            width: `${pixelOffset}px`
+            width: `${position}px`
         });
 
+        const volumeRange = this.volumeTrack.offsetWidth - DOM.width(this.volumeHandle);
+        const volumeLevel = Math.max(0, Math.min(position / volumeRange, 1));
         this.afterVolumeLevelSet(volumeLevel);
-        return this;
     }
 
 
@@ -313,7 +317,7 @@ export default class ControlBar {
      */
     afterVolumeLevelSet(volumeLevel) {
         let volumeClass = "volume-icon";
-        const extraClass = (volumeLevel === 0) ? "off" : (volumeLevel >= 0.75) ? "hi" : null;
+        const extraClass = (volumeLevel === 0) ? "off" : (volumeLevel >= 0.65) ? "hi" : null;
 
         if (extraClass) {
             volumeClass = `${volumeClass} ${extraClass}`;
@@ -329,6 +333,8 @@ export default class ControlBar {
      */
     registerEvents() {
         Event.add(this.playPauseButton, "click", this.handlePlayback);
+        Event.add(this.progressBar, "click", this.onProgressBarClicked);
+        Event.add(this.volumeTrack, "click", this.onVolumeTrackClicked);
         Event.add(this.settingsContainer, "click", this.handleSettingsActions);
 
         return this;
@@ -391,6 +397,39 @@ export default class ControlBar {
                 action
             });
         }
+    };
+
+
+    /**
+     * A callback method invoked when the progress bar is clicked. It repositions the playhead position
+     * at the click location and resumes playing.
+     *
+     * @param {Event} event     the click event on the progress bar
+     */
+    onProgressBarClicked = (event) => {
+        const { x: positionX } = Event.pointer(event);
+        const containerOffset = DOM.cumulativeOffset(this.progressBar).left;
+        const playheadOffsetPercentage = (positionX - containerOffset) / DOM.width(this.progressBar);
+
+        this.delegate.endSeeking(this, playheadOffsetPercentage);
+    };
+
+
+    /**
+     * A callback method invoked when the volume bar is clicked. It adjusts the volume according to the
+     * click location.
+     *
+     * @param {Event} event     the click event on the volume track
+     */
+    onVolumeTrackClicked = (event) => {
+        const { x: positionX } = Event.pointer(event);
+        const containerOffset = DOM.cumulativeOffset(this.volumeTrack).left;
+        const volumeRange = this.volumeTrack.offsetWidth - DOM.width(this.volumeHandle);
+        const volumeLevel = Math.max(0, Math.min((positionX - containerOffset) / volumeRange, 1));
+
+        const position = Math.max(0, Math.min(positionX - containerOffset, volumeRange));
+        this.positionVolumeHandleAt(position);
+        this.delegate.onVolumeChanged(volumeLevel);
     };
 
 
@@ -577,6 +616,8 @@ export default class ControlBar {
         Event.remove(this.progressBarHandle, "mousedown", this.onDragStart);
         Event.remove(this.volumeHandle, "mousedown", this.onDragStart);
         Event.remove(this.settingsContainer, "click", this.handleSettingsActions);
+        Event.remove(this.progressBar, "click", this.onProgressBarClicked);
+        Event.remove(this.volumeTrack, "click", this.onVolumeTrackClicked);
     }
 
 }
