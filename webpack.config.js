@@ -4,6 +4,7 @@ const webpack = require('webpack');
 
 /** Definition of plugins used in the build process */
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 
 /**
@@ -13,6 +14,8 @@ const NODE_MODULES = 'node_modules';
 const buildPaths = {
     ROOT: `${__dirname}/src`,
     INDEX: `${__dirname}/index.js`,
+    SASS: `${__dirname}/src/styles/main.scss`,
+    CSS: "styles/[name].css",
     LIB: `${__dirname}/lib`,
     NODE_MODULES: `${__dirname}/${NODE_MODULES}`
 };
@@ -24,7 +27,8 @@ const webpackConfig = {
      * The different entry points in the application.
      */
     entry: {
-        index: buildPaths.INDEX
+        index: buildPaths.INDEX,
+        main: buildPaths.SASS
     },
 
     /** Configuration of the output files, paths, and formats */
@@ -40,7 +44,7 @@ const webpackConfig = {
      * This section allows the ability to 'require' packages without specifying their extensions.
      */
     resolve: {
-        extensions: ['.js'],
+        extensions: ['.js', '.css', '.scss'],
         modules: [NODE_MODULES]
     },
 
@@ -55,6 +59,35 @@ const webpackConfig = {
                 test: /\.js$/,
                 loaders: ["babel-loader", "eslint-loader"],
                 include: buildPaths.ROOT
+            },
+            {
+                test: /\.css$/,
+                include: buildPaths.ROOT,
+                enforce: "pre",
+                loader: "postcss-loader",
+                options: {
+                    plugins: () => {
+                        return [
+                            require("stylelint")()
+                        ];
+                    }
+                }
+            },
+            {
+                test: /\.scss$/,
+                use: ExtractTextPlugin.extract({
+                    use: ["css-loader", "sass-loader"],
+                    fallback: "style-loader"
+                })
+            },
+            {
+                test: /\.(png|jpe?g|svg)$/,
+                use: {
+                    loader: "file-loader",
+                    options: {
+                        name: "[name].[ext]"
+                    }
+                }
             }
         ]
     },
@@ -75,6 +108,11 @@ const webpackConfig = {
             'process.env': {
                 'NODE_ENV': JSON.stringify('production')
             }
+        }),
+
+        new ExtractTextPlugin({
+            filename: buildPaths.CSS, 
+            allChunks: true
         })
     ]
 
