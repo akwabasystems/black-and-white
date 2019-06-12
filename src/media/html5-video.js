@@ -11,6 +11,13 @@ import Extensions           from "@akwaba/object-extensions";
 import Event                from "@akwaba/events";
 import HTML                 from "@akwaba/html";
 
+import {
+    DELEGATE_METHODS_NOT_IMPLEMENTED,
+    FEATURE_NOT_AVAILABLE,
+    HTML5_VIDEO_NOT_SUPPORTED,
+    INVALID_URL
+} from "../constants/media-error-event-type";
+
 import AbstractVideoElement from "./video-element";
 import * as MediaEvents     from "../constants/playback-event-type";
 import URLResource          from "./url-resource";
@@ -19,12 +26,6 @@ import {
     isHTML5Supported,
     isMobile
 } from "./media-detector";
-import {
-    DELEGATE_METHODS_NOT_IMPLEMENTED,
-    FEATURE_NOT_AVAILABLE,
-    HTML5_VIDEO_NOT_SUPPORTED,
-    INVALID_URL
-} from "../constants/media-error-event-type";
 
 
 export default class HTML5Video extends AbstractVideoElement {
