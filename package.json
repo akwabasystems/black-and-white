@@ -9,11 +9,11 @@
   "keywords": [
     "akwaba",
     "black and white",
-    "media player"
+    "media player",
+    "HTML5"
   ],
   "scripts": {
-    "build": "webpack --mode=production --config webpack.config.js",
-    "test": "./node_modules/.bin/jest --config .jestrc.js"
+    "build": "webpack --mode=production --config webpack.config.js"
   },
   "dependencies": {
     "@akwaba/eslint-config": "^1.1.0",
@@ -34,7 +34,6 @@
     "eslint-plugin-react": "7.11.1",
     "enzyme": "3.6.0",
     "jsdom": "14.0.0",
-    "jest": "23.6.0",
     "css-loader": "^0.25.0",
     "loader-runner": "^2.3.0",
     "extract-text-webpack-plugin": "4.0.0-beta.0",
