@@ -104,6 +104,24 @@ export default class MediaPlayer {
 
         this.createHTML5Video();
         this.videoContainer.appendChild(this.videoElement.video);
+
+        if (isMobile()) {
+            HTML.setStyle(this.videoContainer, {
+                width: "100%"
+            });
+
+            HTML.setStyle(this.videoElement.video, {
+                width: "100%",
+                height: "auto"
+            });
+
+            if (this.options.poster) {
+                this.videoElement.video.poster = this.options.poster;
+            }
+
+            return;
+        }
+
         this.applySizeClasses();
         const shouldAutoplay = !!this.options.autoplay;
 
@@ -125,15 +143,15 @@ export default class MediaPlayer {
         });
         this.videoContainer.appendChild(this.videoMask);
 
-        if (!isMobile()) {
-            this.initializeControlBar().createPlayIcon().createLoadingIndicator();
-        }
+        this.initializeControlBar()
+            .createPlayIcon()
+            .createLoadingIndicator();
 
         if (shouldAutoplay) {
             this.showLoadingIndicator();
         } else {
             this.togglePlayIcon(SHOW);
-            this.adjustVideoMask("dark");
+            this.adjustVideoMask(DARK);
         }
 
         return this;
@@ -418,7 +436,7 @@ export default class MediaPlayer {
         if (this.controlBar) {
             this.controlBar.onPlaybackStateChanged(MediaState.PAUSED);
             this.togglePlayIcon(SHOW);
-            this.adjustVideoMask("dark");
+            this.adjustVideoMask(DARK);
         }
     }
 
@@ -432,7 +450,7 @@ export default class MediaPlayer {
             this.controlBar.onPlaybackEnded();
             this.togglePlayIcon(SHOW);
             this.hideControlBar();
-            this.adjustVideoMask("dark");
+            this.adjustVideoMask(DARK);
         }
 
         this.playbackStarted = false;
@@ -474,7 +492,7 @@ export default class MediaPlayer {
         }
 
         this.togglePlayIcon(SHOW);
-        this.adjustVideoMask("dark");
+        this.adjustVideoMask(DARK);
 
         return this;
     }
@@ -486,7 +504,9 @@ export default class MediaPlayer {
      * @param {String} visibility       a string that specifies whether to show or hide the play icon
      */
     togglePlayIcon(visibility) {
-        HTML[(visibility === SHOW) ? "show" : "hide"](this.playIcon);
+        if (this.playIcon) {
+            HTML[(visibility === SHOW) ? "show" : "hide"](this.playIcon);
+        }
     }
 
 
@@ -495,9 +515,9 @@ export default class MediaPlayer {
      *
      * @param {String} visibility       a string that specifies whether to show or hide the play icon
      */
-    adjustVideoMask(mode = "light") {
+    adjustVideoMask(mode = LIGHT) {
         HTML.setStyle(this.videoMask, {
-            opacity: (mode === "light") ? 0.08 : 0.35
+            opacity: (mode === LIGHT) ? 0.08 : 0.35
         });
     }
 
@@ -640,7 +660,7 @@ export default class MediaPlayer {
         }
 
         this.prepareToHideControlBar();
-        this.adjustVideoMask("dark");
+        this.adjustVideoMask(DARK);
 
         return this;
     };
@@ -692,7 +712,7 @@ export default class MediaPlayer {
 
         if (this.controlBar) {
             this.controlBar.hide();
-            this.adjustVideoMask(this.videoElement.isPlaying() ? "light" : "dark");
+            this.adjustVideoMask(this.videoElement.isPlaying() ? LIGHT : DARK);
         }
     }
 
