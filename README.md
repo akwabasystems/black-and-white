@@ -4,7 +4,7 @@
 
 ![Black and White Media Player](https://s3-us-west-1.amazonaws.com/rendezvous7.net/media/black-and-white/bw-media-player.jpg)
 
-Black-And-White is a minimalist media player that makes it easy to embed high-quality video players in any application. The current implementation supports HTML5 videos only. However, due to its modular architecture, it will be able to support Flash and Quicktime video elements in upcoming updates.
+`Black and White` is a minimalist media player that makes it easy to embed high-quality video players in any application. The current implementation supports HTML5 videos only. However, due to its modular architecture, it will be able to support Flash and Quicktime video elements in upcoming updates.
 
 This module is published on [npmjs.com](https://www.npmjs.com) as `@akwaba/black-and-white`.
 
@@ -52,7 +52,7 @@ The following video formats and extensions are currently supported by the applic
 
 ## A note on video sizes
 
-Black-And-White uses an aspect ratio of `16:9` and a default scale factor of `40`. This means that the video will have an initial width of `640px` and an initial height of `360px`.
+`Black and White` uses an aspect ratio of `16:9` and a default scale factor of `40`. This means that the video will have an initial width of `640px` and an initial height of `360px`.
 
 As a result, it is recommended to maintain this aspect ratio when changing the video size. Following are some common sizes with their respective scaling factor. Those measurements are based on recommended video encoding specifications.
 

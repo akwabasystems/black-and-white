@@ -170,16 +170,6 @@ export default class MediaPlayer {
         };
 
         this.videoElement = MediaFactory.createHTML5Video(this.resourceURL, videoOptions);
-        const enableAirplay = (isMobile() && this.options.enableAirplay);
-
-        if (enableAirplay) {
-            try {
-
-                this.videoElement.setAttribute("x-webkit-airplay", "allow");
-
-            } catch (airplayNotSupported) {
-            }
-        }
     }
 
 
